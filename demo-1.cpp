@@ -45,10 +45,31 @@ int vector2remainder(size_t start, const std::vector<bool>& v)
 
 	for(size_t i = start; i < v.size(); i++)
 	{
-		remainder |=  (1 << (v.size()+1-i)) & v[i];
+		remainder |=  (1 << (v.size()-1-i)) & v[i];
 	}
 
 	return remainder;
+}
+
+bool can_divide(size_t start, const std::vector<bool>& v, int divisor)
+{
+	return false;
+}
+
+size_t divide(size_t start, std::vector<bool>& v, int divisor)
+{
+	for(size_t i = 0; i < sizeof(int)*8; i++)
+	{
+		bool d_digit = divisor & (1 << (sizeof(int)*8-1-i));
+		v.at(start+i) = !v.at(start+i) != !(d_digit);
+	}
+
+	while(v.at(start) == false)
+	{
+		start++;
+	}
+
+	return start;
 }
 
 int crc_remainder()
@@ -57,7 +78,12 @@ int crc_remainder()
 	size_t start = 0;
 	std::vector<bool> v = read_and_append();
 
-	return 0;
+	while(can_divide(start, v, divisor))
+	{
+		start = divide(start, v, divisor);
+	}
+
+	return vector2remainder(start, v);
 }
 
 int main()
