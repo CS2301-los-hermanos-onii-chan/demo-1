@@ -39,9 +39,22 @@ std::vector<bool> read_and_append()
 	return v;
 }
 
+int vector2remainder(size_t start, const std::vector<bool>& v)
+{
+	int remainder = 0;
+
+	for(size_t i = start; i < v.size(); i++)
+	{
+		remainder |=  (1 << (v.size()+1-i)) & v[i];
+	}
+
+	return remainder;
+}
+
 int crc_remainder()
 {
 	int divisor = magic();
+	size_t start = 0;
 	std::vector<bool> v = read_and_append();
 
 	return 0;
