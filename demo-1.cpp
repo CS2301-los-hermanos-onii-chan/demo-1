@@ -5,19 +5,12 @@ int magic()
 {
 	int m = 0;
 
-	for(size_t i = 0; i < sizeof(m); i+=2)
+	for(size_t i = 0; i < sizeof(m)*8; i+=2)
 	{
 		m |= (1 << i);
 	}
 
 	return m;
-}
-
-int crc_remainder()
-{
-	int divisor = magic();
-
-	return 0;
 }
 
 std::vector<bool> read()
@@ -36,8 +29,25 @@ std::vector<bool> read()
 	return v;
 }
 
+std::vector<bool> read_and_append()
+{
+	std::vector<bool> v = read();
+
+	for(size_t i = 0; i < sizeof(int)*8-1; i++)
+		v.push_back(0);
+
+	return v;
+}
+
+int crc_remainder()
+{
+	int divisor = magic();
+	std::vector<bool> v = read_and_append();
+
+	return 0;
+}
+
 int main()
 {
-
-	std::cout << "Hello world\n";
+	std::cout << crc_remainder() << '\n';
 }
