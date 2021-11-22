@@ -1,16 +1,18 @@
 #include <iostream>
 #include <vector>
 
-int magic()
-{
-	int m = 0;
+#define DIV_SIZE 8
 
-	for(size_t i = 0; i < sizeof(m)*8; i+=2)
+std::vector<bool> magic()
+{
+	std::vector<bool> v;
+
+	for(size_t i = 0; i < DIV_SIZE; i++)
 	{
-		m |= (1 << i);
+		v.push_back(!(i & 1));
 	}
 
-	return m;
+	return v;
 }
 
 std::vector<bool> read()
@@ -39,13 +41,13 @@ std::vector<bool> read_and_append()
 	return v;
 }
 
-int vector2remainder(size_t start, const std::vector<bool>& v)
+int vector2remainder(const std::vector<bool>& v)
 {
 	int remainder = 0;
 
-	for(size_t i = start; i < v.size(); i++)
+	for(size_t i = v.size()-1-(DIV_SIZE-1); i < v.size(); i++)
 	{
-		remainder |=  (1 << (v.size()-1-i)) & v[i];
+		remainder |=  v[i] ? (1 << (v.size()-1-i)) : 0;
 	}
 
 	return remainder;
@@ -53,15 +55,14 @@ int vector2remainder(size_t start, const std::vector<bool>& v)
 
 bool can_divide(size_t start, const std::vector<bool>& v)
 {
-	return v.size()-start > sizeof(int)*8-1;
+	return v.size()-start > DIV_SIZE-1;
 }
 
-size_t divide(size_t start, std::vector<bool>& v, int divisor)
+size_t divide(size_t start, std::vector<bool>& v, const std::vector<bool>& divisor)
 {
-	for(size_t i = 0; i < sizeof(int)*8; i++)
+	for(size_t i = 0; i < DIV_SIZE; i++)
 	{
-		bool d_digit = divisor & (1 << (sizeof(int)*8-1-i));
-		v.at(start+i) = v.at(start+i) != d_digit;
+		v.at(start+i) = v.at(start+i) != divisor.at(i);
 	}
 
 	while(v.at(start) == false)
@@ -74,8 +75,8 @@ size_t divide(size_t start, std::vector<bool>& v, int divisor)
 
 int crc_remainder()
 {
-	int divisor = magic();
 	size_t start = 0;
+	std::vector<bool> divisor = magic();
 	std::vector<bool> v = read_and_append();
 
 	while(can_divide(start, v))
@@ -83,7 +84,7 @@ int crc_remainder()
 		start = divide(start, v, divisor);
 	}
 
-	return vector2remainder(start, v);
+	return vector2remainder(v);
 }
 
 int main()
