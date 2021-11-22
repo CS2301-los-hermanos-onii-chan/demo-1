@@ -31,12 +31,12 @@ std::vector<bool> read()
 	return v;
 }
 
-std::vector<bool> read_and_append()
+std::vector<bool> read_and_append(int remainder)
 {
 	std::vector<bool> v = read();
 
 	for(size_t i = 0; i < DIV_SIZE-1; i++)
-		v.push_back(0);
+		v.push_back(remainder & (1 << (DIV_SIZE-1-1-i)));
 
 	return v;
 }
@@ -65,7 +65,7 @@ size_t divide(size_t start, std::vector<bool>& v, const std::vector<bool>& divis
 		v.at(start+i) = v.at(start+i) != divisor.at(i);
 	}
 
-	while(v.at(start) == false)
+	while(start < v.size() && v.at(start) == false)
 	{
 		start++;
 	}
@@ -73,11 +73,11 @@ size_t divide(size_t start, std::vector<bool>& v, const std::vector<bool>& divis
 	return start;
 }
 
-int crc_remainder()
+int crc_remainder(int remainder = 0)
 {
 	size_t start = 0;
 	std::vector<bool> divisor = magic();
-	std::vector<bool> v = read_and_append();
+	std::vector<bool> v = read_and_append(remainder);
 
 	while(can_divide(start, v))
 	{
@@ -87,7 +87,10 @@ int crc_remainder()
 	return vector2remainder(v);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+	if(argc == 2)
+		exit(crc_remainder(atoi(argv[1])) == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
+
 	std::cout << crc_remainder() << '\n';
 }
