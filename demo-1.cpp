@@ -35,7 +35,7 @@ std::vector<bool> read_and_append()
 {
 	std::vector<bool> v = read();
 
-	for(size_t i = 0; i < sizeof(int)*8-1; i++)
+	for(size_t i = 0; i < DIV_SIZE-1; i++)
 		v.push_back(0);
 
 	return v;
