@@ -3,6 +3,7 @@
 
 #define DIV_SIZE 8
 
+// El valor que será añadido a los datos
 std::vector<bool> magic()
 {
 	std::vector<bool> v;
@@ -31,6 +32,7 @@ std::vector<bool> read()
 	return v;
 }
 
+// Al final de los datos se agrega un valor.
 std::vector<bool> read_and_append(int remainder)
 {
 	std::vector<bool> v = read();
@@ -58,6 +60,7 @@ bool can_divide(size_t start, const std::vector<bool>& v)
 	return v.size()-start > DIV_SIZE-1;
 }
 
+// v es dividido y shifteado hasta el primer 1.
 size_t divide(size_t start, std::vector<bool>& v, const std::vector<bool>& divisor)
 {
 	for(size_t i = 0; i < DIV_SIZE; i++)
@@ -73,6 +76,7 @@ size_t divide(size_t start, std::vector<bool>& v, const std::vector<bool>& divis
 	return start;
 }
 
+/// Divide la secuencia de bit v por un número y obtiene el residuo.
 int crc_remainder(int remainder = 0)
 {
 	size_t start = 0;
@@ -89,6 +93,7 @@ int crc_remainder(int remainder = 0)
 
 int main(int argc, char *argv[])
 {
+	// Si el residuo es diferente a 0, entonces los datos no son los mismos.
 	if(argc == 2)
 		exit(crc_remainder(atoi(argv[1])) == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
 
