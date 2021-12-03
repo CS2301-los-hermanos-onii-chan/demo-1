@@ -55,6 +55,7 @@ int vector2remainder(const std::vector<bool>& v)
 	return remainder;
 }
 
+// El input puede ser dividido hasta que ya no haya ningún 0 en los datos originales.
 bool can_divide(size_t start, const std::vector<bool>& v)
 {
 	return v.size()-start > DIV_SIZE-1;
